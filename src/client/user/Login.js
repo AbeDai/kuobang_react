@@ -28,7 +28,7 @@ class LoginPage extends React.Component {
         return (
             <div className="loginPageWrap">
                 <div className="box">
-                    <p>阔邦订单管理系统</p>
+                    <p>阔邦管理系统</p>
                     <div className="loginWrap">
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Item>

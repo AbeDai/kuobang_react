@@ -7,7 +7,7 @@
   .box {
     position: relative;
     top: 50%;
-    margin-top: -170px;
+    transform: translateY(-50%);
     p {
       text-align: center;
       font-size: 26px;
@@ -20,8 +20,10 @@
 }
 
 .loginWrap {
+  position: relative;
   width: 24%;
-  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
   border: 1px #ccc solid;
   padding: 2%;
   border-radius: 5px;
