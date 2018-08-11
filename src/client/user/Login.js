@@ -1,61 +1,50 @@
 import React from 'react'
-import {Form, Input, Button, notification, Icon} from 'antd'
-import createHistory from 'history/createHashHistory'
+import {Form, Input, Button} from 'antd'
+import {goToPath} from '../util/HistoryUtil'
 import './Login.less';
-
-const FormItem = Form.Item
-const history = createHistory()
+import {notificationError} from '../util/NotificationUtil'
 
 class LoginPage extends React.Component {
 
-    handleSubmit = (e) => {
-        e.preventDefault()
-        let n = this.props.form.getFieldsValue().username
-        let p = this.props.form.getFieldsValue().password
-        if (n === '123' && p === '123') {
+    constructor() {
+        super();
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        let userName = this.props.form.getFieldsValue().username;
+        let passWord = this.props.form.getFieldsValue().password;
+        if (userName === '123' && passWord === '123') {
             // 表单的路由处理
-            history.push('/index')
+            goToPath('/index')
         } else {
-            this.openNotificationWithIcon('info')
+            notificationError('密码错误', '当前账户密码错误，忘记密码，请联系管理员！')
         }
     }
 
-    // 返回一个弹框对象，提示用户名和密码
-    openNotificationWithIcon = (type) => {
-        notification[type]({
-            message: '用户名&密码',
-            description: '都是：123',
-            duration: 6,
-            icon: <Icon type="smile-circle" style={{color: '#108ee9'}}/>,
-        })
-    }
-
-    componentDidMount() {
-        this.openNotificationWithIcon('info')
-    }
-
     render() {
-        const {getFieldDecorator} = this.props.form
+        let {getFieldDecorator} = this.props.form;
         return (
-            <div className="loginpagewrap">
+            <div className="loginPageWrap">
                 <div className="box">
-                    <p>Welcome to the ReactSPA</p>
+                    <p>阔邦订单管理系统</p>
                     <div className="loginWrap">
                         <Form onSubmit={this.handleSubmit}>
-                            <FormItem>
+                            <Form.Item>
                                 {getFieldDecorator('username', {
                                     rules: [{required: true, message: '请输入用户名'}],
                                 })(
                                     <Input placeholder="Username：123"/>
                                 )}
-                            </FormItem>
-                            <FormItem>
+                            </Form.Item>
+                            <Form.Item>
                                 {getFieldDecorator('password', {
                                     rules: [{required: true, message: '请输入密码'}],
                                 })(
                                     <Input type="password" placeholder="Password：123"/>
                                 )}
-                            </FormItem>
+                            </Form.Item>
                             <Button type="primary" htmlType="submit" className="loginBtn">Login</Button>
                         </Form>
                     </div>
@@ -65,5 +54,5 @@ class LoginPage extends React.Component {
     }
 }
 
-let Login = Form.create()(LoginPage)
-export default Login
+let Login = Form.create()(LoginPage);
+export default Login;
