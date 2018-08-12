@@ -5,10 +5,11 @@ import Container from '../common/Container'
 import {Router, Route} from "react-router"
 import registerServiceWorker from './registerServiceWorker';
 import {createHashHistory} from 'history';
+import {requireAuthentication} from "../util/LoginUtil";
 
 const root = (
     <Router history={createHashHistory()}>
-        <Route path="/" component={Container}/>
+        <Route path="/" component={requireAuthentication(Container)}/>
     </Router>
 );
 

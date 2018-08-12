@@ -18,7 +18,7 @@ class LoginPage extends React.Component {
             if (!err) {
                 if (values.username === "123" && values.password === "123") {
                     // 表单的路由处理
-                    doLogin("daiyibo-token")
+                    doLogin(JSON.stringify(values))
                     goToPath("/Main")
                 } else {
                     notificationError("密码错误", "当前账户密码错误，忘记密码，请联系管理员！")

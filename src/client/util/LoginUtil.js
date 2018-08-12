@@ -30,8 +30,13 @@ export function requireAuthentication(Component) {
 
             // 判断登陆
             let user = Cookie.get("current-user");
-            alert(user);
-            let login = user;
+            let login = this.checkLogin(user);
+
+            // 已登录，登录页重定向到主页
+            if (login) {
+                goToPath("/main");
+                return;
+            }
 
             // 未登陆重定向到登陆页面
             if (!login) {
@@ -40,6 +45,12 @@ export function requireAuthentication(Component) {
             }
 
             this.setState({login});
+        }
+
+        checkLogin(str){
+            // todo 验证登录有效性
+            console.log(str);
+            return str;
         }
 
         render() {
