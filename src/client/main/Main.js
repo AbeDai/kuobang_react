@@ -6,6 +6,7 @@ import MainSideBar from "./MainSideBar";
 import MainHeader from "./MainHeader";
 import MainFooter from "./MainFooter";
 import MainContent from "./MainContent";
+import {checkLogin} from "../util/LoginUtil";
 
 class MainPage extends React.Component {
     state = {
@@ -13,6 +14,9 @@ class MainPage extends React.Component {
     };
 
     render() {
+        if (!checkLogin()) {
+            return "";
+        }
         return (
             <Layout>
                 <MainSideBar/>

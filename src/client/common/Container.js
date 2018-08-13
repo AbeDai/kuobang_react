@@ -9,7 +9,7 @@ class Container extends React.Component {
         return (<div className="main">
                 <Route path="/main" component={Main}/>
                 <Route path="/login" component={Login}/>
-                <Redirect from="#/" to="/login"/>
+                <Redirect from="#/" to="/main/order"/>
             </div>
         )
     }

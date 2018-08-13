@@ -2,22 +2,33 @@ import React from "react"
 import {Form} from "antd"
 import "./MainSideBar.less";
 import {Layout, Menu, Icon} from "antd";
+import {goToPath} from "../util/HistoryUtil";
 let {Sider} = Layout;
 let SubMenu = Menu.SubMenu;
 
 class SideBar extends React.Component {
-    state = {
-        collapsed: false
-    };
 
-    onCollapse = collapsed => {
-        console.log(collapsed);
+    constructor(){
+        super();
+        this.onCollapse = this.onCollapse.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.state = {
+            collapsed: false,
+        };
+    }
+
+    onCollapse(collapsed){
         this.setState({collapsed});
     };
 
-    handleClick = (e) => {
-        if (e && e.key) {
-            alert(e.key);
+    handleClick(e){
+        if (e && e.keyPath) {
+            let path = "/main";
+            let keyPaths = e.keyPath;
+            for (let i = keyPaths.length-1; i>=0; --i ){
+                path += "/" + keyPaths[i];
+            }
+            goToPath(path)
         }
     };
 
@@ -29,41 +40,28 @@ class SideBar extends React.Component {
                 collapsed={this.state.collapsed}
                 onCollapse={this.onCollapse}>
                 <div className="logo"/>
-                <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline"
+                <Menu theme="light"
+                      mode="inline"
+                      defaultSelectedKeys={["order"]}
                       onClick={this.handleClick}>
-                    <Menu.Item key="1">
+                    <Menu.Item key="order">
                         <Icon type="pie-chart"/>
-                        <span>Option 111</span>
+                        <span>订单管理</span>
                     </Menu.Item>
-                    <Menu.Item key="2">
+                    <Menu.Item key="user">
                         <Icon type="desktop"/>
-                        <span>Option 2</span>
+                        <span>用户管理</span>
                     </Menu.Item>
                     <SubMenu
-                        key="sub1"
+                        key="doc"
                         title={
                             <span>
-                                    <Icon type="user"/>
-                                    <span>User</span>
-                                </span>}>
-                        <Menu.Item key="3">Tom</Menu.Item>
-                        <Menu.Item key="4">Bill</Menu.Item>
-                        <Menu.Item key="5">Alex</Menu.Item>
+                                <Icon type="user"/>
+                                <span>使用手册</span>
+                            </span>}>
+                        <Menu.Item key="docOrder">订单</Menu.Item>
+                        <Menu.Item key="docUser">用户</Menu.Item>
                     </SubMenu>
-                    <SubMenu
-                        key="sub2"
-                        title={
-                            <span>
-                                    <Icon type="team"/>
-                                    <span>Team</span>
-                                </span>}>
-                        <Menu.Item key="6">Team 1</Menu.Item>
-                        <Menu.Item key="8">Team 2</Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="9">
-                        <Icon type="file"/>
-                        <span>File</span>
-                    </Menu.Item>
                 </Menu>
             </Sider>
         );

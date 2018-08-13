@@ -1,6 +1,6 @@
 import React from "react"
 import "./HistoryUtil"
-import {goToPath} from "../util/HistoryUtil";
+import {goToPath, getCurrentPath} from "../util/HistoryUtil";
 import {Cookies} from "react-cookie";
 
 const Cookie = new Cookies();
@@ -18,25 +18,13 @@ export function requireAuthentication(Component) {
             login: true,
         };
 
-        componentWillMount() {
-            this.checkAuth();
-        }
-
         componentWillReceiveProps(nextProps) {
             this.checkAuth();
         }
 
         checkAuth() {
-
             // 判断登陆
-            let user = Cookie.get("current-user");
-            let login = this.checkLogin(user);
-
-            // 已登录，登录页重定向到主页
-            if (login) {
-                goToPath("/main");
-                return;
-            }
+            let login = checkLogin();
 
             // 未登陆重定向到登陆页面
             if (!login) {
@@ -45,12 +33,6 @@ export function requireAuthentication(Component) {
             }
 
             this.setState({login});
-        }
-
-        checkLogin(str){
-            // todo 验证登录有效性
-            console.log(str);
-            return str;
         }
 
         render() {
@@ -62,7 +44,14 @@ export function requireAuthentication(Component) {
     }
 
     Component.AuthenticatedComponent = AuthenticatedComponent;
-    return Component.AuthenticatedComponent
+    return Component.AuthenticatedComponent;
+}
+
+export function checkLogin(){
+    let user = Cookie.get("current-user");
+    // todo 验证登录有效性
+    console.log(user);
+    return user;
 }
 
 export function doLogin(data){
