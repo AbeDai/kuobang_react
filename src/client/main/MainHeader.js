@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, Icon, Layout } from "antd";
 import "./MainHeader.less";
-import {clearToken, getUserInfo} from "../util/LoginUtil";
+import {clearUserCookie, getUserInfo} from "../util/LoginUtil";
 import {goToPath} from "../util/HistoryUtil";
 let {Header} = Layout;
 let SubMenu = Menu.SubMenu;
@@ -22,7 +22,7 @@ class MainHeader extends React.Component {
      */
     doHeadMenu(item){
         if (item.key === "logout") {
-            clearToken();
+            clearUserCookie();
             goToPath("/login");
         }
     };
