@@ -62,3 +62,11 @@ export function getToken() {
 export function clearToken() {
     Cookie.remove("token");
 }
+
+export function saveUserInfo(userinfo){
+    Cookie.set("user_info", JSON.stringify(userinfo));
+}
+
+export function getUserInfo(){
+    return Cookie.get("user_info");
+}

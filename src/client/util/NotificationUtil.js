@@ -10,7 +10,7 @@ export function notificationError(title, desc) {
     notification['error']({
         message: title,
         description: desc,
-        duration: 6,
+        duration: 3,
         icon: <Icon type="frown-o" style={{ color: '#ff112e' }} />,
     })
 }
@@ -24,7 +24,7 @@ export function notificationInfo(title, desc) {
     notification['info']({
         message: title,
         description: desc,
-        duration: 6,
+        duration: 3,
         icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
     })
 }
