@@ -2,11 +2,11 @@ import React from "react"
 import {Form, Input, Button} from "antd"
 import {goToPath} from "../util/HistoryUtil"
 import "./Login.less";
-import {notificationError} from "../util/NotificationUtil"
+import {notificationError, notificationInfo} from "../util/NotificationUtil"
 import {saveToken} from "../util/LoginUtil";
 import {post} from "../util/NetWorkUtil";
-import md5 from "md5-node";
 import {checkRulePassword, checkRuleTel} from "../util/CheckRuleUtil";
+import {hexMD5} from "../util/MD5Util";
 
 class LoginPage extends React.Component {
 
@@ -28,11 +28,11 @@ class LoginPage extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 post("/users/login",
-                    {UserTel: values.tel, UserPassword: md5(values.password)}, res => {
+                    {UserTel: values.tel, UserPassword: hexMD5(values.password)}, res => {
                         if (res.code === 200 && res.data.login) {
                             saveToken(res.data.token);
                             goToPath("/main/order");
-                            notificationError("登录成功")
+                            notificationInfo("登录成功")
                         } else {
                             notificationError("密码错误", "当前手机号或者密码错误！")
                         }
