@@ -3,7 +3,7 @@ import {Form, Input, Button} from "antd"
 import {goToPath} from "../util/HistoryUtil"
 import "./Login.less";
 import {notificationError} from "../util/NotificationUtil"
-import {doLogin} from "../util/LoginUtil";
+import {saveToken} from "../util/LoginUtil";
 import {post} from "../util/NetWorkUtil";
 import md5 from "md5-node";
 import {checkRulePassword, checkRuleTel} from "../util/CheckRuleUtil";
@@ -30,7 +30,7 @@ class LoginPage extends React.Component {
                 post("/users/login",
                     {UserTel: values.tel, UserPassword: md5(values.password)}, res => {
                         if (res.code === 200 && res.data.login) {
-                            doLogin(JSON.stringify(values));
+                            saveToken(res.data.token);
                             goToPath("/main/order");
                             notificationError("登录成功")
                         } else {

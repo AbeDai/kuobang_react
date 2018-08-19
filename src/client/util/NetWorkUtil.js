@@ -1,11 +1,12 @@
 import React from "react"
-import {notificationError} from "./NotificationUtil";
+import {getToken} from "./LoginUtil";
 
 export function post(url, reqBody, callback) {
     fetch(`http://localhost:3000${url}`, {
         method: "post",
         headers:{
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorization": getToken()
         },
         body: JSON.stringify(reqBody)
     }).then(function(response) {

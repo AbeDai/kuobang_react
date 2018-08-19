@@ -48,16 +48,17 @@ export function requireAuthentication(Component) {
 }
 
 export function checkLogin(){
-    let user = Cookie.get("current-user");
-    // todo 验证登录有效性
-    console.log(user);
-    return user;
+    return Cookie.get("token");
 }
 
-export function doLogin(data){
-    Cookie.set("current-user", data);
+export function saveToken(token){
+    Cookie.set("token", token);
 }
 
-export function doLogout() {
-    Cookie.remove("current-user");
+export function getToken() {
+    Cookie.get("token");
+}
+
+export function clearToken() {
+    Cookie.remove("token");
 }
