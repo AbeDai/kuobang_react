@@ -56,7 +56,7 @@ export function saveToken(token){
 }
 
 export function getToken() {
-    Cookie.get("token");
+    return Cookie.get("token");
 }
 
 export function clearUserCookie() {
