@@ -1,19 +1,18 @@
 import React from "react"
-import {List, Avatar, Spin} from 'antd';
-import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import VList from 'react-virtualized/dist/commonjs/List';
+import {Table} from 'antd';
 import "./User.less";
 import {post} from "../util/NetWorkUtil";
 import {notificationError} from "../util/NotificationUtil";
+import {goToPath} from "../util/HistoryUtil";
+const {Column} = Table;
 
 class User extends React.Component {
 
     constructor() {
         super();
 
-        this.renderItem = this.renderItem.bind(this);
         this.requestUserList = this.requestUserList.bind(this);
+        this.editUser = this.editUser.bind(this);
 
         this.state = {
             data: [],
@@ -25,69 +24,86 @@ class User extends React.Component {
     }
 
     /**
+     * 编辑用户信息
+     */
+    editUser(index) {
+        let data = {user: this.state.data[index]};
+        let path = {
+            pathname: '/main/user/editor',
+            state: data,
+        };
+        goToPath(path);
+    }
+
+    /**
      * 请求用户列表
      */
-    requestUserList(){
+    requestUserList() {
         post("/users/list", {}, res => {
             if (res.code === 200 && res.data) {
-                this.setState({data: res.data});
+                //TODO: 测试数据，多来几条
+                let aaa = [];
+                aaa = aaa.concat(res.data);
+                aaa = aaa.concat(res.data);
+                aaa = aaa.concat(res.data);
+                aaa = aaa.concat(res.data);
+                this.setState({data: aaa});
             } else {
                 notificationError("请求出错，请稍后再试!");
             }
         });
     }
 
-    /**
-     * 加载表单
-     */
-    renderItem({index, key, style}) {
-        let itemView;
-        if (index === 0) {
-            // 表头
-            itemView =
-                <List.Item key={key} style={style}>
-                    <div>Content</div>
-                </List.Item>;
-        } else {
-            // 表单内容
-            const item = this.state.data[index - 1];
-            itemView =
-                <List.Item key={key} style={style}>
-                    <List.Item.Meta
-                        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                        title={<a href="https://ant.design">{item["UserNick"]}</a>}
-                        description={item["UserTel"]}
-                    />
-                    <div>Content</div>
-                </List.Item>;
-        }
-        return itemView;
-    };
-
     render() {
-        return (
-            <List>
-                {this.state.data.length > 0 && <WindowScroller>
-                    {({height, isScrolling, onChildScroll, scrollTop}) => (
-                        <AutoSizer disableHeight>
-                            {({width}) => (
-                                <VList
-                                    autoHeight
-                                    height={height}
-                                    isScrolling={isScrolling}
-                                    onScroll={onChildScroll}
-                                    overscanRowCount={2}
-                                    rowCount={this.state.data.length}
-                                    rowHeight={73}
-                                    rowRenderer={this.renderItem}
-                                    scrollTop={scrollTop}
-                                    width={width}/>
-                            )}
-                        </AutoSizer>
-                    )}
-                </WindowScroller>}
-            </List>
-        );
+        return <div>
+            <Table
+                className="user-list-item"
+                dataSource={this.state.data}
+                pagination={false}
+                bordered>
+                <Column
+                    title='昵称'
+                    dataIndex='UserNick'
+                    key="UserNick"
+                    render={(text) => {
+                        return text
+                    }}/>
+                <Column
+                    title='手机号'
+                    dataIndex='UserTel'
+                    key="UserTel"
+                    render={(text) => {
+                        return text
+                    }}/>
+                <Column
+                    title='微信号'
+                    dataIndex='WeChatId'
+                    key="WeChatId"
+                    render={(text) => {
+                        return text
+                    }}/>
+                <Column
+                    title='用户状态'
+                    dataIndex='UserState'
+                    key="UserState"
+                    render={(text) => {
+                        return text === 0 ? "离职" : "在职"
+                    }}/>
+                <Column
+                    title='用户权限'
+                    dataIndex='UserAuthority'
+                    key="UserAuthority"
+                    render={(text) => {
+                        return text === 0 ? "普通用户" : "管理员"
+                    }}/>
+                <Column
+                    title="操作"
+                    key="action"
+                    render={(text, record, index) => (
+                        <button className="user-edit-btn" onClick={() => this.editUser(index)}>编辑</button>
+                    )}/>
+            </Table>
+        </div>;
     }
 }
 

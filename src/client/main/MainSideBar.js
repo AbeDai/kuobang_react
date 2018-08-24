@@ -48,7 +48,7 @@ class SideBar extends React.Component {
                         <Icon type="pie-chart"/>
                         <span>订单管理</span>
                     </Menu.Item>
-                    <Menu.Item key="user">
+                    <Menu.Item key="user/list">
                         <Icon type="desktop"/>
                         <span>用户管理</span>
                     </Menu.Item>

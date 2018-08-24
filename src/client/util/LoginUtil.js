@@ -1,6 +1,6 @@
 import React from "react"
 import "./HistoryUtil"
-import {goToPath, getCurrentPath} from "../util/HistoryUtil";
+import {goToPathWithNewHistory} from "../util/HistoryUtil";
 import {Cookies} from "react-cookie";
 
 const Cookie = new Cookies();
@@ -28,7 +28,7 @@ export function requireAuthentication(Component) {
 
             // 未登陆重定向到登陆页面
             if (!login) {
-                goToPath("/login");
+                goToPathWithNewHistory("/login");
                 return;
             }
 

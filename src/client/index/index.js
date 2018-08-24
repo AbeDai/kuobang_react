@@ -7,8 +7,9 @@ import registerServiceWorker from './registerServiceWorker';
 import {createHashHistory} from 'history';
 import {requireAuthentication} from "../util/LoginUtil";
 
+export let history = createHashHistory();
 const root = (
-    <Router history={createHashHistory()}>
+    <Router history={history}>
         <Route path="/" component={requireAuthentication(Container)}/>
     </Router>
 );
