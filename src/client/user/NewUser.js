@@ -3,7 +3,6 @@ import React from "react";
 import "./NewUser.less";
 import UserForm from "./UserForm";
 import {post} from "../util/NetWorkUtil";
-import {saveUserInfo} from "../util/LoginUtil";
 import {hexMD5} from "../util/MD5Util";
 import {notificationError, notificationInfo} from "../util/NotificationUtil";
 import {goToPath} from "../util/HistoryUtil";
@@ -28,11 +27,10 @@ export class NewUser extends React.Component {
                 UserAuthority:values["authority"]
             }, res => {
                 if (res.code === 200) {
-                    saveUserInfo(res.data.user);
                     goToPath("/main/user/list");
-                    notificationInfo("登录成功")
+                    notificationInfo("修改成功")
                 } else {
-                    notificationError("参数错误")
+                    notificationError("参数错误", JSON.stringify(res.data))
                 }
             });
     };
@@ -41,7 +39,8 @@ export class NewUser extends React.Component {
         return (
             <UserForm handleSubmit={this.handleSubmit}
                       passwordRequired={true}
-                      user={{}}/>
+                      user={{}}
+                      telDisabled={false}/>
         );
     }
 }

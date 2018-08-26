@@ -3,34 +3,58 @@ import {Form} from "antd"
 import "./MainSideBar.less";
 import {Layout, Menu, Icon} from "antd";
 import {goToPath} from "../util/HistoryUtil";
+import {getUserInfo} from "../util/LoginUtil";
+
 let {Sider} = Layout;
 let SubMenu = Menu.SubMenu;
 
 class SideBar extends React.Component {
 
-    constructor(){
+    constructor() {
         super();
         this.onCollapse = this.onCollapse.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.getUserManagerModule = this.getUserManagerModule.bind(this);
         this.state = {
             collapsed: false,
         };
     }
 
-    onCollapse(collapsed){
+    /**
+     * 侧边栏展开操作
+     */
+    onCollapse(collapsed) {
         this.setState({collapsed});
     };
 
-    handleClick(e){
+    /**
+     * 页面跳转
+     */
+    handleClick(e) {
         if (e && e.keyPath) {
             let path = "/main";
             let keyPaths = e.keyPath;
-            for (let i = keyPaths.length-1; i>=0; --i ){
+            for (let i = keyPaths.length - 1; i >= 0; --i) {
                 path += "/" + keyPaths[i];
             }
             goToPath(path)
         }
     };
+
+    /**
+     * 生成用户管理模块
+     */
+    getUserManagerModule(){
+        let needShowUserManager = getUserInfo()["UserAuthority"] === 2;
+        if (needShowUserManager) {
+            return (<Menu.Item key="user/list">
+                <Icon type="desktop"/>
+                <span>用户管理</span>
+            </Menu.Item>)
+        }else {
+            return null;
+        }
+    }
 
     render() {
         return (
@@ -48,10 +72,7 @@ class SideBar extends React.Component {
                         <Icon type="pie-chart"/>
                         <span>订单管理</span>
                     </Menu.Item>
-                    <Menu.Item key="user/list">
-                        <Icon type="desktop"/>
-                        <span>用户管理</span>
-                    </Menu.Item>
+                    {this.getUserManagerModule()}
                     <SubMenu
                         key="doc"
                         title={

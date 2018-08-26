@@ -22,12 +22,24 @@ class UserFormPage extends React.Component {
     render() {
         let {getFieldDecorator} = this.props.form;
         let requiredPassword = this.props["passwordRequired"];
-        let user = this.props.user;
+        let user = this.props["user"];
+        let telDisabled = this.props["telDisabled"];
         return (
             <div className="user-editor-form-div">
                 <Form
                     className="user-editor-form"
                     onSubmit={this.handleSubmit}>
+                    <Form.Item
+                        labelCol={{span: 7}}
+                        wrapperCol={{span: 12}}
+                        label={"手机号"}>
+                        {getFieldDecorator("tel", {
+                            rules: [{required: true, message: "请输入手机号"}, checkRuleTel],
+                            initialValue: user["UserTel"]
+                        })(
+                            <Input disabled={telDisabled} placeholder="请输入手机号"/>
+                        )}
+                    </Form.Item>
                     <Form.Item
                         labelCol={{span: 7}}
                         wrapperCol={{span: 12}}
@@ -37,17 +49,6 @@ class UserFormPage extends React.Component {
                             initialValue: user["UserNick"]
                         })(
                             <Input placeholder="请输入昵称"/>
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        labelCol={{span: 7}}
-                        wrapperCol={{span: 12}}
-                        label={"手机号"}>
-                        {getFieldDecorator("tel", {
-                            rules: [{required: true, message: "请输入手机号"}, checkRuleTel],
-                            initialValue: user["UserTel"]
-                        })(
-                            <Input placeholder="请输入手机号"/>
                         )}
                     </Form.Item>
                     <Form.Item
@@ -65,7 +66,7 @@ class UserFormPage extends React.Component {
                         wrapperCol={{span: 12}}
                         label={"状态"}>
                         {getFieldDecorator("state", {
-                            initialValue: user["UserState"] ? user["UserState"] : 1
+                            initialValue: typeof user["UserState"] === "undefined" ? 1 : user["UserState"]
                         })(
                             <RadioGroup onChange={(e)=>{console.log('radio checked:' + e.target.value);}}>
                                 <RadioButton value={1}>在职</RadioButton>
@@ -78,7 +79,7 @@ class UserFormPage extends React.Component {
                         wrapperCol={{span: 12}}
                         label={"权限"}>
                         {getFieldDecorator("authority", {
-                            initialValue: user["UserAuthority"] ? user["UserAuthority"] : 0
+                            initialValue: typeof user["UserAuthority"] === "undefined" ? 0 : user["UserAuthority"]
                         })(
                             <RadioGroup onChange={(e)=>{console.log('radio checked:' + e.target.value);}}>
                                 <RadioButton value={0}>普通用户</RadioButton>
