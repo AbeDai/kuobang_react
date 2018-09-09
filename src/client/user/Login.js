@@ -32,7 +32,7 @@ class LoginPage extends React.Component {
                         if (res.code === 200 && res.data.login) {
                             saveToken(res.data.token);
                             saveUserInfo(res.data.user);
-                            goToPath("/main/order");
+                            goToPath("/main/yangPin/list");
                             notificationInfo("登录成功")
                         } else {
                             notificationError("密码错误", "当前手机号或者密码错误！")

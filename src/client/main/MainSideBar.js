@@ -44,15 +44,18 @@ class SideBar extends React.Component {
     /**
      * 生成用户管理模块
      */
-    getUserManagerModule(){
+    getUserManagerModule() {
         let needShowUserManager = getUserInfo()["UserAuthority"] === 2;
         if (needShowUserManager) {
             return (<Menu.Item key="user/list">
                 <Icon type="desktop"/>
-                <span>用户管理</span>
+                <span>职员管理</span>
             </Menu.Item>)
-        }else {
-            return null;
+        } else {
+            return (<Menu.Item key="user/list">
+                <Icon type="desktop"/>
+                <span>职员列表</span>
+            </Menu.Item>)
         }
     }
 
@@ -66,12 +69,18 @@ class SideBar extends React.Component {
                 <div className="logo"/>
                 <Menu theme="light"
                       mode="inline"
-                      defaultSelectedKeys={["order"]}
+                      defaultSelectedKeys={["yangPin/list"]}
                       onClick={this.handleClick}>
-                    <Menu.Item key="order">
-                        <Icon type="pie-chart"/>
-                        <span>订单管理</span>
-                    </Menu.Item>
+                    <SubMenu
+                        key="yangPin"
+                        title={
+                            <span>
+                                <Icon type="pie-chart"/>
+                                <span>样品管理</span>
+                            </span>}>
+                        <Menu.Item key="list">样品列表</Menu.Item>
+                        <Menu.Item key="add">添加样品</Menu.Item>
+                    </SubMenu>
                     {this.getUserManagerModule()}
                     <SubMenu
                         key="doc"

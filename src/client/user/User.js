@@ -4,6 +4,8 @@ import "./User.less";
 import {post} from "../util/NetWorkUtil";
 import {notificationError} from "../util/NotificationUtil";
 import {goToPath} from "../util/HistoryUtil";
+import {getUserInfo} from "../util/LoginUtil";
+
 const {Column} = Table;
 
 class User extends React.Component {
@@ -14,6 +16,7 @@ class User extends React.Component {
         this.requestUserList = this.requestUserList.bind(this);
         this.editUser = this.editUser.bind(this);
         this.addUser = this.addUser.bind(this);
+        this.isShowUserManager = this.isShowUserManager.bind(this);
 
         this.state = {
             data: [],
@@ -49,7 +52,7 @@ class User extends React.Component {
     requestUserList() {
         post("/users/list", {}, res => {
             if (res.code === 200 && res.data) {
-                let data = res.data.concat([{}]);
+                let data = this.isShowUserManager() ? res.data.concat([{}]) : res.data;
                 this.setState({data: data});
             } else {
                 notificationError("请求出错，请稍后再试!");
@@ -73,7 +76,7 @@ class User extends React.Component {
                         children: text,
                         props: {},
                     };
-                    if (index === length-1) {
+                    if (this.isShowUserManager() && index === length - 1) {
                         obj.props.colSpan = 0;
                     }
                     return obj;
@@ -87,7 +90,7 @@ class User extends React.Component {
                         children: text,
                         props: {},
                     };
-                    if (index === length-1) {
+                    if (this.isShowUserManager() && index === length - 1) {
                         obj.props.colSpan = 0;
                     }
                     return obj;
@@ -101,7 +104,7 @@ class User extends React.Component {
                         children: text === 0 ? "离职" : "在职",
                         props: {},
                     };
-                    if (index === length-1) {
+                    if (this.isShowUserManager() && index === length - 1) {
                         obj.props.colSpan = 0;
                     }
                     return obj;
@@ -115,32 +118,38 @@ class User extends React.Component {
                         children: text === 0 ? "普通用户" : "管理员",
                         props: {},
                     };
-                    if (index === length-1) {
+                    if (this.isShowUserManager() && index === length - 1) {
                         obj.props.colSpan = 0;
                     }
                     return obj;
                 }}/>
-            <Column
+            {this.isShowUserManager() && (<Column
                 title="操作"
                 key="action"
                 render={(text, record, index) => {
                     let btn;
                     if (index === length - 1) {
                         btn = <button className="add-user-btn" onClick={this.addUser}>添加新用户</button>
-                    }else {
+                    } else {
                         btn = <button className="user-edit-btn" onClick={() => this.editUser(index)}>编辑</button>
                     }
                     const obj = {
                         children: btn,
                         props: {},
                     };
-                    if (index === length-1) {
+                    if (index === length - 1) {
                         obj.props.colSpan = 5;
                     }
                     return obj;
-                }}/>
+                }}/>)}
         </Table>);
     }
+
+    // 是否应该显示管理页面
+    isShowUserManager() {
+        return getUserInfo()["UserAuthority"] === 2
+    }
+
 }
 
 export default User;
