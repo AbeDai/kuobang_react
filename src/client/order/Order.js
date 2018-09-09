@@ -91,27 +91,27 @@ class Order extends React.Component {
                 key="PinZhong"
                 render={this.renderText}/>
             <Column
-                title='纱织'
-                dataIndex='ShaZhi'
-                key="ShaZhi"
-                render={this.renderText}/>
-            <Column
                 title='成分'
                 dataIndex='ChenFeng'
                 key="ChenFeng"
                 render={this.renderText}/>
             <Column
-                title='克重'
+                title='纱支（支）'
+                dataIndex='ShaZhi'
+                key="ShaZhi"
+                render={this.renderText}/>
+            <Column
+                title='克重（克）'
                 dataIndex='KeZhong'
                 key="KeZhong"
                 render={this.renderText}/>
             <Column
-                title='门幅'
+                title='门幅（厘米）'
                 dataIndex='MenFu'
                 key="MenFu"
                 render={this.renderText}/>
             <Column
-                title='价格'
+                title='价格（元/米）'
                 dataIndex='JiaGe'
                 key="JiaGe"
                 render={this.renderText}/>

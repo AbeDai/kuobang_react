@@ -159,7 +159,7 @@ export class YangPinDetail extends React.Component {
                             render={(text, row, index) => {
                                 return {
                                     children: text,
-                                    props: {width: 100},
+                                    props: {width: 130},
                                 };
                             }}/>
                         <Column
@@ -252,18 +252,18 @@ const DetailDesc = {
     BianHao: "编号",
     UserNick: "负责人",
     PinZhong: "品种",
-    ShaZhi: "纱织",
     ChenFeng: "成分",
-    KeZhong: "克重",
-    MenFu: "门幅",
-    JiaGe: "价格",
+    ShaZhi: "纱支（支）",
+    KeZhong: "克重（克）",
+    MenFu: "门幅（厘米）",
+    JiaGe: "价格（元/米）",
 };
 
 // 提示语
 const DetailPleaseHolder = {
     PinZhong: "请输入样品品种",
-    ShaZhi: "请输入样品纱织",
     ChenFeng: "请输入样品成分",
+    ShaZhi: "请输入样品纱支",
     KeZhong: "请输入样品克重",
     MenFu: "请输入样品门幅",
     JiaGe: "请输入样品价格",
@@ -272,8 +272,8 @@ const DetailPleaseHolder = {
 // 验证条件
 const DetailCheck = {
     PinZhong: checkRulePinZhong,
-    ShaZhi: checkRuleShaZhi,
     ChenFeng: checkRuleChenFeng,
+    ShaZhi: checkRuleShaZhi,
     KeZhong: checkRuleKeZhong,
     MenFu: checkRuleMenFu,
     JiaGe: checkRuleJiaGe,

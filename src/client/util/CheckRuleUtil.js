@@ -78,21 +78,21 @@ export function checkRuleBianHao(rule, value, callback) {
  * 表单校验条件-品种校验
  */
 export function checkRulePinZhong(rule, value, callback) {
-    if (checkStringLength(value, 5, 15)) {
+    if (checkStringLength(value, 2, 15)) {
         callback();
     } else {
-        callback("品种描述长度应为5~15位之间");
+        callback("品种描述长度应为2~15位之间");
     }
 }
 
 /**
- * 表单校验条件-纱织校验
+ * 表单校验条件-纱支校验
  */
 export function checkRuleShaZhi(rule, value, callback) {
-    if (checkStringLength(value, 5, 15)) {
+    if (checkFloat(value)) {
         callback();
     } else {
-        callback("纱织描述长度应为5~15位之间");
+        callback("纱支应为数字");
     }
 }
 
@@ -100,10 +100,10 @@ export function checkRuleShaZhi(rule, value, callback) {
  * 表单校验条件-成分校验
  */
 export function checkRuleChenFeng(rule, value, callback) {
-    if (checkStringLength(value, 5, 15)) {
+    if (checkStringLength(value, 1, 20)) {
         callback();
     } else {
-        callback("成分描述长度应为5~15位之间");
+        callback("成分描述长度应为1~20位之间");
     }
 }
 
@@ -125,7 +125,7 @@ export function checkRuleMenFu(rule, value, callback) {
     if (checkFloat(value)) {
         callback();
     } else {
-        callback("门幅应为浮点数");
+        callback("门幅应为数字");
     }
 }
 
@@ -136,7 +136,7 @@ export function checkRuleJiaGe(rule, value, callback) {
     if (checkFloat(value)) {
         callback();
     } else {
-        callback("价格应为浮点数");
+        callback("价格应为数字");
     }
 }
 
@@ -147,16 +147,20 @@ export function checkRuleTotalMiShu(rule, value, callback) {
     if (checkFloat(value)) {
         callback();
     } else {
-        callback("总米数应为浮点数");
+        callback("总米数应为数字");
     }
 }
 
 /**
- * 验证内容长度
+ * 验证是否为数字
  */
-function checkFloat(value) {
-    const number = parseFloat(value);
-    return !isNaN(number);
+function checkFloat(str) {
+    let float = new RegExp('^(?:[-+])?(?:[0-9]+)?(?:\\' + '.' + '[0-9]*)?(?:[eE][\\+\\-]?(?:[0-9]+))?$');
+    if (str === '' || str === '.' || str === '-' || str === '+') {
+        return false;
+    }
+    let value = parseFloat(str.replace(',', '.'));
+    return float.test(str);
 }
 
 /**

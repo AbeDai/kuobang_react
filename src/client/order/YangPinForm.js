@@ -57,17 +57,6 @@ class YangPinFormPage extends React.Component {
                     <Form.Item
                         labelCol={{span: 7}}
                         wrapperCol={{span: 12}}
-                        label={"纱织"}>
-                        {getFieldDecorator("ShaZhi", {
-                            rules: [{required: true, message: "请输入样品纱织"}, checkRuleShaZhi],
-                            initialValue: yangPin["ShaZhi"]
-                        })(
-                            <Input placeholder="请输入样品纱织"/>
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        labelCol={{span: 7}}
-                        wrapperCol={{span: 12}}
                         label={"成分"}>
                         {getFieldDecorator("ChenFeng", {
                             rules: [{required: true, message: "请输入样品成分"}, checkRuleChenFeng],
@@ -79,7 +68,18 @@ class YangPinFormPage extends React.Component {
                     <Form.Item
                         labelCol={{span: 7}}
                         wrapperCol={{span: 12}}
-                        label={"克重"}>
+                        label={"纱支（支）"}>
+                        {getFieldDecorator("ShaZhi", {
+                            rules: [{required: true, message: "请输入样品纱支"}, checkRuleShaZhi],
+                            initialValue: yangPin["ShaZhi"]
+                        })(
+                            <Input placeholder="请输入样品纱支"/>
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{span: 7}}
+                        wrapperCol={{span: 12}}
+                        label={"克重（克）"}>
                         {getFieldDecorator("KeZhong", {
                             rules: [{required: true, message: "请输入样品克重"}, checkRuleKeZhong],
                             initialValue: yangPin["KeZhong"]
@@ -90,7 +90,7 @@ class YangPinFormPage extends React.Component {
                     <Form.Item
                         labelCol={{span: 7}}
                         wrapperCol={{span: 12}}
-                        label={"门幅"}>
+                        label={"门幅（厘米）"}>
                         {getFieldDecorator("MenFu", {
                             rules: [{required: true, message: "请输入样品门幅"}, checkRuleMenFu],
                             initialValue: yangPin["MenFu"]
@@ -101,7 +101,7 @@ class YangPinFormPage extends React.Component {
                     <Form.Item
                         labelCol={{span: 7}}
                         wrapperCol={{span: 12}}
-                        label={"价格（元）"}>
+                        label={"价格（元/米）"}>
                         {getFieldDecorator("JiaGe", {
                             rules: [{required: true, message: "请输入样品价格"}, checkRuleJiaGe],
                             initialValue: yangPin["JiaGe"]

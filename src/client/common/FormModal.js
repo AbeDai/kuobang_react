@@ -41,6 +41,7 @@ class FormModalPage extends React.Component {
                 footer={null}>
                 <div className="form-div">
                     <Form
+                        AUTOCOMPLETE="OFF"
                         className="form"
                         onSubmit={this.handleSubmit}>
                         {this.renderFormItems(getFieldDecorator)}
