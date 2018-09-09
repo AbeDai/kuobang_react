@@ -1,6 +1,6 @@
 import React from "react"
 import "./Order.less";
-import {Table} from 'antd';
+import {Button, Icon, Input, InputNumber, Table} from 'antd';
 import {post} from "../util/NetWorkUtil";
 import {goToPath} from "../util/HistoryUtil";
 import {notificationError} from "../util/NotificationUtil";
@@ -8,6 +8,9 @@ import {notificationError} from "../util/NotificationUtil";
 const {Column} = Table;
 
 class Order extends React.Component {
+
+    searchFilter = {};
+
     constructor() {
         super();
 
@@ -15,11 +18,13 @@ class Order extends React.Component {
         this.editYangPin = this.editYangPin.bind(this);
         this.tablePageChange = this.tablePageChange.bind(this);
         this.renderText = this.renderText.bind(this);
+        this.renderSearchFilter = this.renderSearchFilter.bind(this);
 
         this.state = {
             data: [],
             pagination: {defaultPageSize: 10},
-            loading: false
+            loading: false,
+            rangeFilter: {}
         };
     }
 
@@ -45,8 +50,21 @@ class Order extends React.Component {
      * 请求用户列表
      */
     requestUserList(pageNum) {
+        const rangeFilter = this.state.rangeFilter;
+        const searchFilter = this.searchFilter;
         this.setState({loading: true});
-        post("/yangPin/list", {PageNum: pageNum, PageSize: 10}, res => {
+        post("/yangPin/list", {
+            PageNum: pageNum,
+            PageSize: 10,
+            PinZhong: searchFilter["PinZhong"],
+            ChenFeng: searchFilter["ChenFeng"],
+            ShaZhiMin: rangeFilter["ShaZhi"] ? rangeFilter["ShaZhi"]["min"] : 0,
+            ShaZhiMax: rangeFilter["ShaZhi"] ? rangeFilter["ShaZhi"]["max"] : Number.MAX_SAFE_INTEGER,
+            KeZhongMin: rangeFilter["KeZhong"] ? rangeFilter["KeZhong"]["min"] : 0,
+            KeZhongMax: rangeFilter["KeZhong"] ? rangeFilter["KeZhong"]["max"] : Number.MAX_SAFE_INTEGER,
+            MenFuMin: rangeFilter["MenFu"] ? rangeFilter["MenFu"]["min"] : 0,
+            MenFuMax: rangeFilter["MenFu"] ? rangeFilter["MenFu"]["max"] : Number.MAX_SAFE_INTEGER,
+        }, res => {
             if (res.code === 200 && res.data) {
                 let data = res.data;
                 let list = data.list;
@@ -89,27 +107,47 @@ class Order extends React.Component {
                 title='品种'
                 dataIndex='PinZhong'
                 key="PinZhong"
-                render={this.renderText}/>
+                render={this.renderText}
+                filterDropdown={({setSelectedKeys, selectedKeys, confirm}) => {
+                    return this.renderSearchFilter("PinZhong", {setSelectedKeys, selectedKeys, confirm});
+                }}
+                filterIcon={() => <Icon type="filter" theme="outlined"/>}/>
             <Column
                 title='成分'
                 dataIndex='ChenFeng'
                 key="ChenFeng"
-                render={this.renderText}/>
+                render={this.renderText}
+                filterDropdown={({setSelectedKeys, selectedKeys, confirm}) => {
+                    return this.renderSearchFilter("ChenFeng", {setSelectedKeys, selectedKeys, confirm});
+                }}
+                filterIcon={() => <Icon type="filter" theme="outlined"/>}/>
             <Column
                 title='纱支（支）'
                 dataIndex='ShaZhi'
                 key="ShaZhi"
-                render={this.renderText}/>
+                render={this.renderText}
+                filterDropdown={({setSelectedKeys, selectedKeys, confirm}) => {
+                    return this.renderNumberFilter("ShaZhi", {setSelectedKeys, selectedKeys, confirm});
+                }}
+                filterIcon={() => <Icon type="filter" theme="outlined"/>}/>
             <Column
                 title='克重（克）'
                 dataIndex='KeZhong'
                 key="KeZhong"
-                render={this.renderText}/>
+                render={this.renderText}
+                filterDropdown={({setSelectedKeys, selectedKeys, confirm}) => {
+                    return this.renderNumberFilter("KeZhong", {setSelectedKeys, selectedKeys, confirm});
+                }}
+                filterIcon={() => <Icon type="filter" theme="outlined"/>}/>
             <Column
                 title='门幅（厘米）'
                 dataIndex='MenFu'
                 key="MenFu"
-                render={this.renderText}/>
+                render={this.renderText}
+                filterDropdown={({setSelectedKeys, selectedKeys, confirm}) => {
+                    return this.renderNumberFilter("MenFu", {setSelectedKeys, selectedKeys, confirm});
+                }}
+                filterIcon={() => <Icon type="filter" theme="outlined"/>}/>
             <Column
                 title='价格（元/米）'
                 dataIndex='JiaGe'
@@ -126,6 +164,90 @@ class Order extends React.Component {
                     };
                 }}/>
         </Table>);
+    }
+
+    /**
+     * 搜索过滤器
+     */
+    renderSearchFilter(key, {setSelectedKeys, selectedKeys, confirm}) {
+        return (<div className="search-filter-dropdown">
+            <Input
+                className="search-filter-dropdown-input"
+                placeholder="输入关键字"
+                value={selectedKeys[0]}
+                onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            />
+            <Button
+                className="search-filter-dropdown-button"
+                type="primary" onClick={() => {
+                confirm();
+                this.searchFilter[key] = selectedKeys[0];
+                this.requestUserList(0);
+            }}>Search</Button>
+            <Button
+                className="search-filter-dropdown-button"
+                onClick={() => {
+                confirm();
+                this.searchFilter[key] = undefined;
+                selectedKeys[0] = "";
+                this.requestUserList(0);
+            }}>Reset</Button>
+        </div>);
+    }
+
+    /**
+     * 数字过滤器
+     */
+    renderNumberFilter(key, {setSelectedKeys, selectedKeys, confirm}) {
+        const rangeFilter = this.state.rangeFilter;
+        let range = rangeFilter[key];
+        let minValue = range && range["min"] ? range["min"] : 0;
+        let maxValue = range && range["max"] ? range["max"] : Number.MAX_SAFE_INTEGER;
+        return (<div className="number-filter-dropdown">
+            <InputNumber min={0} max={maxValue}
+                         className="number-filter-dropdown-input"
+                         value={selectedKeys[0]}
+                         onChange={e => {
+                             if (e) {
+                                 let value = e;
+                                 selectedKeys[0] = value;
+                                 let rangeFilter = this.state.rangeFilter;
+                                 rangeFilter[key] = rangeFilter[key] || {};
+                                 rangeFilter[key]["min"] = value;
+                                 this.setState({rangeFilter: rangeFilter});
+                             }
+                         }}/>
+            {" - "}
+            <InputNumber min={minValue} max={Number.MAX_SAFE_INTEGER}
+                         className="number-filter-dropdown-input"
+                         value={selectedKeys[1]}
+                         onChange={e => {
+                             if (e) {
+                                 let value = e;
+                                 selectedKeys[1] = value;
+                                 let rangeFilter = this.state.rangeFilter;
+                                 rangeFilter[key] = rangeFilter[key] || {};
+                                 rangeFilter[key]["max"] = value;
+                                 this.setState({rangeFilter: rangeFilter});
+                             }
+                         }}/>
+            <Button type="primary"
+                    className="number-filter-dropdown-button"
+                    onClick={() => {
+                        confirm();
+                        this.requestUserList(0);
+                    }}>Search</Button>
+            <Button
+                className="number-filter-dropdown-button"
+                onClick={() => {
+                    confirm();
+                    let rangeFilter = this.state.rangeFilter;
+                    rangeFilter[key] = {};
+                    setSelectedKeys([]);
+                    this.setState({rangeFilter: rangeFilter});
+                    this.requestUserList(0);
+                }}>Reset</Button>
+        </div>);
     }
 
     /**
