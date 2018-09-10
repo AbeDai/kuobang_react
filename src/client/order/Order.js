@@ -58,12 +58,12 @@ class Order extends React.Component {
             PageSize: 10,
             PinZhong: searchFilter["PinZhong"],
             ChenFeng: searchFilter["ChenFeng"],
-            ShaZhiMin: rangeFilter["ShaZhi"] ? rangeFilter["ShaZhi"]["min"] : 0,
-            ShaZhiMax: rangeFilter["ShaZhi"] ? rangeFilter["ShaZhi"]["max"] : Number.MAX_SAFE_INTEGER,
-            KeZhongMin: rangeFilter["KeZhong"] ? rangeFilter["KeZhong"]["min"] : 0,
-            KeZhongMax: rangeFilter["KeZhong"] ? rangeFilter["KeZhong"]["max"] : Number.MAX_SAFE_INTEGER,
-            MenFuMin: rangeFilter["MenFu"] ? rangeFilter["MenFu"]["min"] : 0,
-            MenFuMax: rangeFilter["MenFu"] ? rangeFilter["MenFu"]["max"] : Number.MAX_SAFE_INTEGER,
+            ShaZhiMin: rangeFilter["ShaZhi"] && rangeFilter["ShaZhi"]["min"] ? rangeFilter["ShaZhi"]["min"] : 0,
+            ShaZhiMax: rangeFilter["ShaZhi"] && rangeFilter["ShaZhi"]["max"] ? rangeFilter["ShaZhi"]["max"] : Number.MAX_SAFE_INTEGER,
+            KeZhongMin: rangeFilter["KeZhong"] && rangeFilter["KeZhong"]["min"] ? rangeFilter["KeZhong"]["min"] : 0,
+            KeZhongMax: rangeFilter["KeZhong"] && rangeFilter["KeZhong"]["max"] ? rangeFilter["KeZhong"]["max"] : Number.MAX_SAFE_INTEGER,
+            MenFuMin: rangeFilter["MenFu"] && rangeFilter["MenFu"]["min"] ? rangeFilter["MenFu"]["min"] : 0,
+            MenFuMax: rangeFilter["MenFu"] && rangeFilter["MenFu"]["max"] ? rangeFilter["MenFu"]["max"] : Number.MAX_SAFE_INTEGER,
         }, res => {
             if (res.code === 200 && res.data) {
                 let data = res.data;
@@ -183,7 +183,7 @@ class Order extends React.Component {
                 confirm();
                 this.searchFilter[key] = selectedKeys[0];
                 this.requestUserList(0);
-            }}>Search</Button>
+            }}>搜索</Button>
             <Button
                 className="search-filter-dropdown-button"
                 onClick={() => {
@@ -191,7 +191,7 @@ class Order extends React.Component {
                 this.searchFilter[key] = undefined;
                 selectedKeys[0] = "";
                 this.requestUserList(0);
-            }}>Reset</Button>
+            }}>重置</Button>
         </div>);
     }
 
@@ -208,35 +208,31 @@ class Order extends React.Component {
                          className="number-filter-dropdown-input"
                          value={selectedKeys[0]}
                          onChange={e => {
-                             if (e) {
-                                 let value = e;
-                                 selectedKeys[0] = value;
-                                 let rangeFilter = this.state.rangeFilter;
-                                 rangeFilter[key] = rangeFilter[key] || {};
-                                 rangeFilter[key]["min"] = value;
-                                 this.setState({rangeFilter: rangeFilter});
-                             }
+                             let value = e ? e : undefined;
+                             selectedKeys[0] = value;
+                             let rangeFilter = this.state.rangeFilter;
+                             rangeFilter[key] = rangeFilter[key] || {};
+                             rangeFilter[key]["min"] = value;
+                             this.setState({rangeFilter: rangeFilter});
                          }}/>
             {" - "}
             <InputNumber min={minValue} max={Number.MAX_SAFE_INTEGER}
                          className="number-filter-dropdown-input"
                          value={selectedKeys[1]}
                          onChange={e => {
-                             if (e) {
-                                 let value = e;
-                                 selectedKeys[1] = value;
-                                 let rangeFilter = this.state.rangeFilter;
-                                 rangeFilter[key] = rangeFilter[key] || {};
-                                 rangeFilter[key]["max"] = value;
-                                 this.setState({rangeFilter: rangeFilter});
-                             }
+                             let value = e ? e : undefined;
+                             selectedKeys[1] = value;
+                             let rangeFilter = this.state.rangeFilter;
+                             rangeFilter[key] = rangeFilter[key] || {};
+                             rangeFilter[key]["max"] = value;
+                             this.setState({rangeFilter: rangeFilter});
                          }}/>
             <Button type="primary"
                     className="number-filter-dropdown-button"
                     onClick={() => {
                         confirm();
                         this.requestUserList(0);
-                    }}>Search</Button>
+                    }}>过滤</Button>
             <Button
                 className="number-filter-dropdown-button"
                 onClick={() => {
@@ -246,7 +242,7 @@ class Order extends React.Component {
                     setSelectedKeys([]);
                     this.setState({rangeFilter: rangeFilter});
                     this.requestUserList(0);
-                }}>Reset</Button>
+                }}>重置</Button>
         </div>);
     }
 

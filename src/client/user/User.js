@@ -114,8 +114,16 @@ class User extends React.Component {
                 dataIndex='UserAuthority'
                 key="UserAuthority"
                 render={(text, row, index) => {
+                    let authority;
+                    if (text === 2) {
+                        authority = "超级管理员";
+                    }else if (text === 1) {
+                        authority = "管理员";
+                    }else {
+                        authority = "普通用户";
+                    }
                     const obj = {
-                        children: text === 0 ? "普通用户" : "管理员",
+                        children: authority,
                         props: {},
                     };
                     if (this.isShowUserManager() && index === length - 1) {

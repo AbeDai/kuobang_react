@@ -1,4 +1,3 @@
-import {Radio} from 'antd';
 import React from "react";
 import "./NewUser.less";
 import UserForm from "./UserForm";
@@ -22,9 +21,9 @@ export class NewUser extends React.Component {
             {
                 UserTel: values["tel"],
                 UserPassword: hexMD5(values["password"]),
-                UserNick:values["nickName"],
-                UserState:values["state"],
-                UserAuthority:values["authority"]
+                UserNick: values["nickName"],
+                UserState: values["state"],
+                UserAuthority: values["authority"]
             }, res => {
                 if (res.code === 200) {
                     goToPath("/main/user/list");

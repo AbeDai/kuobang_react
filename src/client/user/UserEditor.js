@@ -2,7 +2,6 @@ import React from "react";
 import "./UserEditor.less";
 import UserForm from "./UserForm";
 import {post} from "../util/NetWorkUtil";
-import {saveUserInfo} from "../util/LoginUtil";
 import {hexMD5} from "../util/MD5Util";
 import {notificationError, notificationInfo} from "../util/NotificationUtil";
 import {goToPath} from "../util/HistoryUtil";
@@ -27,20 +26,20 @@ export class UserEditor extends React.Component {
 
     handleSubmit = (values) => {
         let password = values["password"];
-        let finalPassword= password ? hexMD5(password) : "";
+        let finalPassword = password ? hexMD5(password) : "";
         post("/users/edit",
             {
                 UserTel: values["tel"],
                 UserPassword: finalPassword,
-                UserNick:values["nickName"],
-                UserState:values["state"],
-                UserAuthority:values["authority"]
+                UserNick: values["nickName"],
+                UserState: values["state"],
+                UserAuthority: values["authority"]
             }, res => {
                 if (res.code === 200) {
                     goToPath("/main/user/list");
-                    notificationInfo("修改成功")
+                    notificationInfo("修改成功");
                 } else {
-                    notificationError("参数错误", JSON.stringify(res.data))
+                    notificationError("参数错误", JSON.stringify(res.data));
                 }
             });
     };

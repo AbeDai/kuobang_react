@@ -1,7 +1,6 @@
 import React from "react";
 import "./YangPinNew.less";
 import {post} from "../util/NetWorkUtil";
-import {hexMD5} from "../util/MD5Util";
 import {notificationError, notificationInfo} from "../util/NotificationUtil";
 import {goToPath} from "../util/HistoryUtil";
 import YangPinForm from "./YangPinForm";

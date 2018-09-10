@@ -1,4 +1,4 @@
-import {Form, Input, Button, Radio} from 'antd';
+import {Button, Form, Input} from 'antd';
 import React from "react";
 import "./YangPinForm.less";
 import {
@@ -8,8 +8,7 @@ import {
     checkRuleKeZhong,
     checkRuleMenFu,
     checkRulePinZhong,
-    checkRuleShaZhi,
-    checkRuleTotalMiShu
+    checkRuleShaZhi
 } from "../util/CheckRuleUtil";
 
 class YangPinFormPage extends React.Component {
@@ -30,6 +29,7 @@ class YangPinFormPage extends React.Component {
         return (
             <div className="yangpin-editor-form-div">
                 <Form
+                    AUTOCOMPLETE="OFF"
                     className="yangpin-editor-form"
                     onSubmit={this.handleSubmit}>
                     <Form.Item

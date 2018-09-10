@@ -6,14 +6,14 @@ import {goToPath} from "./HistoryUtil";
 export function post(url, reqBody, callback) {
     fetch(`http://localhost:3000${url}`, {
         method: "post",
-        headers:{
+        headers: {
             "content-type": "application/json",
             "authorization": getToken()
         },
         body: JSON.stringify(reqBody)
-    }).then(function(response) {
+    }).then(function (response) {
         return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
         if (data.code === 401) {
             goToPath("/login");
             notificationError("Token校验失败")
