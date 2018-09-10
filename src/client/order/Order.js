@@ -149,9 +149,9 @@ class Order extends React.Component {
                 }}
                 filterIcon={() => <Icon type="filter" theme="outlined"/>}/>
             <Column
-                title='价格（元/米）'
-                dataIndex='JiaGe'
-                key="JiaGe"
+                title='位置'
+                dataIndex='WeiZhi'
+                key="WeiZhi"
                 render={this.renderText}/>
             <Column
                 title="操作"

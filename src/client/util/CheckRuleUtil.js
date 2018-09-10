@@ -141,13 +141,24 @@ export function checkRuleJiaGe(rule, value, callback) {
 }
 
 /**
- * 表单校验条件-总米数校验
+ * 表单校验条件-位置校验
  */
-export function checkRuleTotalMiShu(rule, value, callback) {
-    if (checkFloat(value)) {
+export function checkRuleWeiZhi(rule, value, callback) {
+    if (checkStringLength(value, 1, 20)) {
         callback();
     } else {
-        callback("总米数应为数字");
+        callback("位置描述长度应为1~20位之间");
+    }
+}
+
+/**
+ * 表单校验条件-备注校验
+ */
+export function checkRuleBeiZhu(rule, value, callback) {
+    if (!value || checkStringLength(value, 0, 500)) {
+        callback();
+    } else {
+        callback("备注描述应少于500字");
     }
 }
 

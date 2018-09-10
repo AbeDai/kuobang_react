@@ -13,6 +13,7 @@ export class YangPinNew extends React.Component {
     }
 
     handleSubmit(values) {
+        alert(JSON.stringify(values["BeiZhu"]));
         post("/yangPin/add", {
             BianHao: values["BianHao"],
             PinZhong: values["PinZhong"],
@@ -21,6 +22,8 @@ export class YangPinNew extends React.Component {
             KeZhong: values["KeZhong"],
             MenFu: values["MenFu"],
             JiaGe: values["JiaGe"],
+            WeiZhi: values["WeiZhi"],
+            BeiZhu: values["BeiZhu"] ? values["BeiZhu"] : "",
         }, res => {
             if (res.code === 200) {
                 goToPath("/main/yangPin/list");

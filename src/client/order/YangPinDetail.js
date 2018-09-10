@@ -2,12 +2,13 @@ import React from "react";
 import "./YangPinDetail.less";
 import {Icon, Input, Modal, Table, Tooltip} from 'antd';
 import {
+    checkRuleBeiZhu,
     checkRuleChenFeng,
     checkRuleJiaGe,
     checkRuleKeZhong,
     checkRuleMenFu,
     checkRulePinZhong,
-    checkRuleShaZhi
+    checkRuleShaZhi, checkRuleWeiZhi
 } from "../util/CheckRuleUtil";
 import FormModal from "../common/FormModal";
 import {notificationError, notificationInfo} from "../util/NotificationUtil";
@@ -16,6 +17,7 @@ import {getUserInfo} from "../util/LoginUtil";
 import {goToPath} from "../util/HistoryUtil";
 
 const {Column} = Table;
+const {TextArea} = Input;
 const confirm = Modal.confirm;
 
 export class YangPinDetail extends React.Component {
@@ -97,13 +99,15 @@ export class YangPinDetail extends React.Component {
             ChenFeng: yangPin["ChenFeng"],
             KeZhong: yangPin["KeZhong"],
             MenFu: yangPin["MenFu"],
+            WeiZhi: yangPin["WeiZhi"],
             JiaGe: yangPin["JiaGe"],
+            BeiZhu: yangPin["BeiZhu"] ? yangPin["BeiZhu"] : "",
         };
         update[key] = value;
         post("/yangPin/edit", update, res => {
             if (res.code === 200) {
                 this.requestYangPinDetail(yangPin["YangPinID"]);
-                notificationInfo("添加成功")
+                notificationInfo("修改成功")
             } else {
                 notificationError("参数错误", JSON.stringify(res.data))
             }
@@ -192,7 +196,7 @@ export class YangPinDetail extends React.Component {
                 </div>);
         } else if (index > 1 && this.canEdit()) {
             return (
-                <div>
+                <div className="enable-return">
                     {text}
                     <Tooltip title="编辑内容">
                         <button className="edit-btn"
@@ -225,10 +229,12 @@ export class YangPinDetail extends React.Component {
             handleCancel={this.handleCancel}
             renderFormItems={(getFieldDecorator) => {
                 return [getFieldDecorator("item", {
-                    rules: [{required: true, message: pleaseHolder}, check],
+                    rules: [{required: key !== "BeiZhu", message: pleaseHolder}, check],
                     initialValue: detailItem ? detailItem.content : ""
                 })(
-                    <Input placeholder={pleaseHolder}/>
+                    key === "BeiZhu"
+                        ? <TextArea placeholder={pleaseHolder} autosize={{ minRows: 2, maxRows: 5 }} />
+                        : <Input placeholder={pleaseHolder}/>
                 )];
             }}/>);
     }
@@ -256,7 +262,9 @@ const DetailDesc = {
     ShaZhi: "纱支（支）",
     KeZhong: "克重（克）",
     MenFu: "门幅（厘米）",
+    WeiZhi: "位置",
     JiaGe: "价格（元/米）",
+    BeiZhu: "备注",
 };
 
 // 提示语
@@ -266,7 +274,9 @@ const DetailPleaseHolder = {
     ShaZhi: "请输入样品纱支",
     KeZhong: "请输入样品克重",
     MenFu: "请输入样品门幅",
+    WeiZhi: "请输入样品位置",
     JiaGe: "请输入样品价格",
+    BeiZhu: "请输入样品备注",
 };
 
 // 验证条件
@@ -276,5 +286,7 @@ const DetailCheck = {
     ShaZhi: checkRuleShaZhi,
     KeZhong: checkRuleKeZhong,
     MenFu: checkRuleMenFu,
+    WeiZhi: checkRuleWeiZhi,
     JiaGe: checkRuleJiaGe,
+    BeiZhu: checkRuleBeiZhu,
 };

@@ -2,14 +2,17 @@ import {Button, Form, Input} from 'antd';
 import React from "react";
 import "./YangPinForm.less";
 import {
+    checkRuleBeiZhu,
     checkRuleBianHao,
     checkRuleChenFeng,
     checkRuleJiaGe,
     checkRuleKeZhong,
     checkRuleMenFu,
     checkRulePinZhong,
-    checkRuleShaZhi
+    checkRuleShaZhi, checkRuleWeiZhi
 } from "../util/CheckRuleUtil";
+
+const {TextArea} = Input;
 
 class YangPinFormPage extends React.Component {
 
@@ -101,12 +104,34 @@ class YangPinFormPage extends React.Component {
                     <Form.Item
                         labelCol={{span: 7}}
                         wrapperCol={{span: 12}}
+                        label={"位置"}>
+                        {getFieldDecorator("WeiZhi", {
+                            rules: [{required: true, message: "请输入样品所在位置"}, checkRuleWeiZhi],
+                            initialValue: yangPin["WeiZhi"]
+                        })(
+                            <Input placeholder="请输入样品所在位置"/>
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{span: 7}}
+                        wrapperCol={{span: 12}}
                         label={"价格（元/米）"}>
                         {getFieldDecorator("JiaGe", {
                             rules: [{required: true, message: "请输入样品价格"}, checkRuleJiaGe],
                             initialValue: yangPin["JiaGe"]
                         })(
                             <Input placeholder="请输入样品价格"/>
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        labelCol={{span: 7}}
+                        wrapperCol={{span: 12}}
+                        label={"备注"}>
+                        {getFieldDecorator("BeiZhu", {
+                            rules: [{required: false, message: "请输入样品备注"}, checkRuleBeiZhu],
+                            initialValue: yangPin["BeiZhu"]
+                        })(
+                            <TextArea placeholder="请输入样品备注" autosize={{ minRows: 2, maxRows: 5 }} />
                         )}
                     </Form.Item>
                     <Button type="primary" htmlType="submit" className="yangpin-editor-form-submit">确认</Button>
