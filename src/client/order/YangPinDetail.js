@@ -22,9 +22,6 @@ const confirm = Modal.confirm;
 
 export class YangPinDetail extends React.Component {
 
-    // 样品
-    yangPin;
-
     constructor() {
         super();
         this.rendContent = this.rendContent.bind(this);
@@ -157,7 +154,6 @@ export class YangPinDetail extends React.Component {
                         dataSource={detail}
                         pagination={false}>
                         <Column
-                            columnWidth={200}
                             dataIndex='desc'
                             key="desc"
                             render={(text, row, index) => {
@@ -196,8 +192,8 @@ export class YangPinDetail extends React.Component {
                 </div>);
         } else if (index > 1 && this.canEdit()) {
             return (
-                <div className="enable-return">
-                    {text}
+                <div>
+                    <span className="enable-return">{text}</span>
                     <Tooltip title="编辑内容">
                         <button className="edit-btn"
                                 onClick={() => this.editItem(index)}>
