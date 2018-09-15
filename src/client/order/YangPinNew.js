@@ -13,7 +13,6 @@ export class YangPinNew extends React.Component {
     }
 
     handleSubmit(values) {
-        alert(JSON.stringify(values["BeiZhu"]));
         post("/yangPin/add", {
             BianHao: values["BianHao"],
             PinZhong: values["PinZhong"],

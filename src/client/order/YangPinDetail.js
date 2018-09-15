@@ -1,6 +1,6 @@
 import React from "react";
 import "./YangPinDetail.less";
-import {Icon, Input, Modal, Table, Tooltip} from 'antd';
+import {Upload, Icon, Input, Modal, Table, Tooltip} from 'antd';
 import {
     checkRuleBeiZhu,
     checkRuleChenFeng,
@@ -12,15 +12,18 @@ import {
 } from "../util/CheckRuleUtil";
 import FormModal from "../common/FormModal";
 import {notificationError, notificationInfo} from "../util/NotificationUtil";
-import {post} from "../util/NetWorkUtil";
+import {post, postFile} from "../util/NetWorkUtil";
 import {getUserInfo} from "../util/LoginUtil";
 import {goToPath} from "../util/HistoryUtil";
+import ImageOperator from "../common/ImageOperator";
 
 const {Column} = Table;
 const {TextArea} = Input;
 const confirm = Modal.confirm;
 
 export class YangPinDetail extends React.Component {
+
+    yangPin = {};
 
     constructor() {
         super();
@@ -33,11 +36,13 @@ export class YangPinDetail extends React.Component {
         this.canEdit = this.canEdit.bind(this);
         this.canDelete = this.canDelete.bind(this);
         this.deleteYangPin = this.deleteYangPin.bind(this);
+        this.renderImageUpload = this.renderImageUpload.bind(this);
 
         this.state = {
             detailContent: [],
             editIndex: -1,
-            modalVisible: false
+            yangPinId: "",
+            imageList: [],
         };
     }
 
@@ -57,14 +62,28 @@ export class YangPinDetail extends React.Component {
         }, res => {
             if (res.code === 200) {
                 this.yangPin = res.data;
+                // 表单内容
                 let detailContent = [];
-                let keys = Object.keys(DetailDesc);
-                for (let i = 0; i < keys.length; i++) {
-                    let key = keys[i];
+                let detailKeys = Object.keys(DetailDesc);
+                for (let i = 0; i < detailKeys.length; i++) {
+                    let key = detailKeys[i];
                     detailContent[i] = {desc: DetailDesc[key], content: this.yangPin[key]}
                 }
+                // 图片内容
+                let imageList = [];
+                let images = this.yangPin["Images"];
+                for (let j = 0; j < images.length; j++)  {
+                    let image = images[j];
+                    imageList[j] = {
+                        uid: image["FileID"],
+                        status: 'done',
+                        url: image["FileUrl"],
+                    };
+                }
                 this.setState({
-                    detailContent: detailContent
+                    yangPinId: yangPinId,
+                    detailContent: detailContent,
+                    imageList: imageList
                 });
             } else {
                 notificationError("参数错误", JSON.stringify(res.data))
@@ -170,9 +189,24 @@ export class YangPinDetail extends React.Component {
                             }}/>
                     </Table>
                 </div>
+                {this.renderImageUpload()}
                 {this.renderEditModal()}
             </div>
         )
+    }
+
+    // 上传图片
+    renderImageUpload() {
+        const yangPinId = this.state.yangPinId;
+        const imageList = this.state.imageList;
+        const enable = this.canEdit();
+        return (
+            <div className="image-upload">
+                <ImageOperator
+                    yangPinID={yangPinId}
+                    fileList={imageList}
+                    enable={enable}/>
+            </div>);
     }
 
     /**
@@ -229,7 +263,7 @@ export class YangPinDetail extends React.Component {
                     initialValue: detailItem ? detailItem.content : ""
                 })(
                     key === "BeiZhu"
-                        ? <TextArea placeholder={pleaseHolder} autosize={{ minRows: 2, maxRows: 5 }} />
+                        ? <TextArea placeholder={pleaseHolder} autosize={{minRows: 2, maxRows: 5}}/>
                         : <Input placeholder={pleaseHolder}/>
                 )];
             }}/>);
