@@ -7,7 +7,7 @@ import {goToPath} from "./HistoryUtil";
  * 普通post请求
  */
 export function post(url, reqBody, callback) {
-    fetch(`http://localhost:3000${url}`, {
+    fetch(`http://localhost:9100${url}`, {
         method: "post",
         headers: {
             "content-type": "application/json",
