@@ -30,7 +30,8 @@ export function post(url, reqBody, callback) {
  * 上传图片post请求
  */
 export function postFile(url, formData, callback) {
-    fetch(`http://localhost:3000${url}`,{
+    fetch(`http://127.0.0.1:9100${url}`, {
+    // fetch(`https://kuobang-bg.daiyibo.cn${url}`, {
         method:'post',
         headers: {
             "authorization": getToken()

@@ -9,8 +9,8 @@ import Input from "antd/es/input/Input";
 import {notificationError, notificationInfo} from "../util/NotificationUtil";
 import {post} from "../util/NetWorkUtil";
 import {hexMD5} from "../util/MD5Util";
-import {Route, Switch, Link, withRouter} from 'react-router-dom';
-import {Breadcrumb, Alert} from 'antd';
+import {Breadcrumb} from 'antd';
+import {Link} from "react-router-dom";
 
 let {Header} = Layout;
 let SubMenu = Menu.SubMenu;
@@ -25,6 +25,7 @@ class MainHeader extends React.Component {
         this.renderPasswordModal = this.renderPasswordModal.bind(this);
         this.showPassword = this.showPassword.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.renderBreadcrumb = this.renderBreadcrumb.bind(this);
 
         this.state = {
             username: getUserInfo()["UserNick"],
@@ -86,7 +87,7 @@ class MainHeader extends React.Component {
     render() {
         return (
             <Header className="main_header">
-                <p className="main_header_path">{"大师傅的"}</p>
+                <div className="main_header_path">{this.renderBreadcrumb()}</div>
                 <Menu mode="horizontal" className="main_header_mine" onClick={this.doHeadMenu}>
                     <SubMenu title={<div><Icon type="user"/>{this.state.username}</div>}>
                         <Menu.Item key="resetPassword">修改密码</Menu.Item>
@@ -123,6 +124,49 @@ class MainHeader extends React.Component {
             }}/>);
     }
 
+    /**
+     * 加载面包屑
+     */
+    renderBreadcrumb() {
+        const urlBreadcrumbs = URL_BREADCRUB_MAP[getCurrentPath()];
+        const breadcrumbItems = [];
+        breadcrumbItems[0] = (
+            <Breadcrumb.Item>
+                <Link className="link" to="/main/yangPin/list">首页</Link>
+            </Breadcrumb.Item>
+        );
+        for (let i = 0; i < urlBreadcrumbs.length; i++) {
+            let urlBreadcrumb = urlBreadcrumbs[i];
+            breadcrumbItems[i+1] = (
+                <Breadcrumb.Item key={urlBreadcrumb.url}>
+                    {urlBreadcrumb.url
+                        ? <Link className="link" to={urlBreadcrumb.url}>{urlBreadcrumb.name}</Link>
+                        : <span className="span">{urlBreadcrumb.name}</span>}
+                </Breadcrumb.Item>
+            );
+        }
+        return (
+            <Breadcrumb>
+                {breadcrumbItems}
+            </Breadcrumb>
+        );
+    };
+
 }
+
+// 面包屑目录结构
+const URL_BREADCRUB_MAP = {
+    "/main/yangPin/list": [{name: "样品管理", url: null}, {name: "样品列表", url: "/main/yangPin/list"}],
+    "/main/yangPin/add": [{name: "样品管理", url: null}, {name: "添加样品", url: "/main/yangPin/add"}],
+    "/main/yangPin/detail": [{name: "样品管理", url: null}, {name: "样品列表", url: "/main/yangPin/list"}, {
+        name: "样品详情",
+        url: "/main/yangPin/detail"
+    }],
+    "/main/user/list": [{name: "职员管理", url: "/main/user/list"}],
+    "/main/user/editor": [{name: "职员管理", url: "/main/user/list"}, {name: "职员编辑", url: "/main/user/editor"}],
+    "/main/user/add": [{name: "职员管理", url: "/main/user/list"}, {name: "职员添加", url: "/main/user/add"}],
+    "/main/doc/docOrder": [{name: "使用手册", url: null}, {name: "订单", url: "/main/doc/docOrder"}],
+    "/main/doc/docUser": [{name: "使用手册", url: null}, {name: "用户", url: "/main/doc/docUser"}],
+};
 
 export default MainHeader;
