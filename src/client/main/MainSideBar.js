@@ -48,12 +48,12 @@ class SideBar extends React.Component {
         let needShowUserManager = getUserInfo()["UserAuthority"] === 2;
         if (needShowUserManager) {
             return (<Menu.Item key="user/list">
-                <Icon type="desktop"/>
+                <Icon type="user"/>
                 <span>职员管理</span>
             </Menu.Item>)
         } else {
             return (<Menu.Item key="user/list">
-                <Icon type="desktop"/>
+                <Icon type="user"/>
                 <span>职员列表</span>
             </Menu.Item>)
         }
@@ -66,7 +66,10 @@ class SideBar extends React.Component {
                 collapsible
                 collapsed={this.state.collapsed}
                 onCollapse={this.onCollapse}>
-                <div className="logo"/>
+                <div className="logoDiv">
+                    <img className="img" src="http://daiyibo.oss-cn-hongkong.aliyuncs.com/kuobang_logo.svg"/>
+                    <span className="text">阔邦贸易</span>
+                </div>
                 <Menu theme="light"
                       mode="inline"
                       defaultSelectedKeys={["yangPin/list"]}
@@ -75,7 +78,7 @@ class SideBar extends React.Component {
                         key="yangPin"
                         title={
                             <span>
-                                <Icon type="pie-chart"/>
+                                <Icon type="profile" theme="outlined" />
                                 <span>样品管理</span>
                             </span>}>
                         <Menu.Item key="list">样品列表</Menu.Item>
@@ -86,7 +89,7 @@ class SideBar extends React.Component {
                         key="doc"
                         title={
                             <span>
-                                <Icon type="user"/>
+                                <Icon type="question" theme="outlined" />
                                 <span>使用手册</span>
                             </span>}>
                         <Menu.Item key="docOrder">订单</Menu.Item>

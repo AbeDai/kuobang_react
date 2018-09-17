@@ -7,7 +7,8 @@ import {goToPath} from "./HistoryUtil";
  * 普通post请求
  */
 export function post(url, reqBody, callback) {
-    fetch(`https://kuobang-bg.daiyibo.cn${url}`, {
+    fetch(`http://127.0.0.1:9100${url}`, {
+        // fetch(`https://kuobang-bg.daiyibo.cn${url}`, {
         method: "post",
         headers: {
             "content-type": "application/json",
