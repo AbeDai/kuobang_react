@@ -9,7 +9,7 @@ class OrderDoc extends React.Component {
     render() {
         return (
             <p>
-                doc_order,doc_order,doc_order,doc_order!
+                订单使用文档
             </p>
         );
     }

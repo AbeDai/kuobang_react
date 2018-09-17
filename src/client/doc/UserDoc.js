@@ -9,7 +9,7 @@ class UserDoc extends React.Component {
     render() {
         return (
             <p>
-                doc_user,doc_user,doc_user,doc_user!
+                用户使用文档
             </p>
         );
     }

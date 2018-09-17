@@ -72,7 +72,8 @@ class SideBar extends React.Component {
                 </div>
                 <Menu theme="light"
                       mode="inline"
-                      defaultSelectedKeys={["yangPin/list"]}
+                      defaultOpenKeys={["yangPin", "doc"]}
+                      defaultSelectedKeys={["list"]}
                       onClick={this.handleClick}>
                     <SubMenu
                         key="yangPin"
